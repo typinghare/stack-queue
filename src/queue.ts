@@ -1,7 +1,7 @@
 import { EmptyQueueException } from './exceptions';
 import { SearchPredicate } from './type';
 
-export default class Queue<E = any> {
+export default class Queue<E = any> implements Iterable<E>{
   /**
    * The container of elements. For the sake of safety, this property is private and thus not
    * accessible from outside the class.
