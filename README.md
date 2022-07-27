@@ -62,10 +62,10 @@ console.log(line.search('Jack'));  // >> 1
 These two classes are basically copied from the Java source code. I notice that `Stack` and `Queue` are written by two different guys, and there are some incoordinations within them, so I adjusted some details and make them perfect.
 
 | Operation | Throw Exception if Empty | Return null if Empty |
-| --------- | ------------------------ | -------------------- |
-| Insert    | `push()` | `enqueue()`   |                      |
-| Remove    | `pop()` | `dequeue()`    | `poll()`             |
-| Examine   | `element()`              | `peek()`             |
+| --------- | ------------------------ |--------------------|
+| Insert    | `push()` \ `enqueue()`        |    |
+| Remove    | `pop()` \ `dequeue()`       | `poll()` |
+| Examine   | `element()`              | `peek()`           |
 
 As shown in the table above, method `poll()` returns and removes the top element of a stack or the head element of a queue, or returns null if it is empty; `element()` retrieves but does not remove, the top element of a stack or the head element of a queue, and throws an exception if it is empty; `peek` does as `element()` but returns null if it is empty.
 
