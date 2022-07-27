@@ -1,4 +1,5 @@
 import { EmptyStackException } from './exceptions';
+import { SearchPredicate } from './type';
 
 export default class Stack<E = any> implements Iterable<E> {
   /**
@@ -41,15 +42,25 @@ export default class Stack<E = any> implements Iterable<E> {
   }
 
   /**
-   * Pops an item from this stack and returns it. The item popped is removed from this stack.
+   * (when <count> is default) Pops an item from this stack and returns it.
+   * The item popped is removed from this stack.
    * This method differs from poll() only in that it throws an exception if this stack is empty.
-   * @return the item popped from this stack
-   * @throws EmptyStackException if this stack is empty
+   * (when <count> is greater than 1) Executes <count> times of pop and return the last item.
+   * Item traveled will be removed, including the returned one.
+   * @param count the number of times executing pop, the default value is 1
+   * @return the item popped from this stack or the last pop item
+   * @throws EmptyStackException (when <count> is default) if this stack is empty
+   * @throws EmptyStackException (when <count> is greater than 1) if this stack is empty when the
+   * last pop is being executed
    */
-  public pop(): E {
-    const item = this.elements.pop();
+  public pop(count: number = 1): E {
+    let item;
 
-    if (item == undefined) {
+    for (let i = 0; i < count; ++i) {
+      item = this.elements.pop();
+    }
+
+    if (item === undefined) {
       throw new EmptyStackException();
     }
 
@@ -115,7 +126,7 @@ export default class Stack<E = any> implements Iterable<E> {
    * top of this stack of the occurrence nearest the top of this stack; the topmost item on the
    * stack is considered to be at distance 1.
    * @param item the item to search for
-   * @return the 1 based depth of the item, or -1 if the item is not on this stack
+   * @return the 1-based depth of the item, or -1 if the item is not on this stack
    */
   public search(item: E): number {
     if (this.elements.length == 0) {
@@ -124,5 +135,24 @@ export default class Stack<E = any> implements Iterable<E> {
 
     const index = this.elements.indexOf(item);
     return index == -1 ? -1 : this.elements.length - index;
+  }
+
+  /**
+   * Iterates over elements of this stack, returning the first element predicate returns true for.
+   * @param predicate the function invoked per iteration.
+   * @return the 1-based depth of the item, or -1 if the item satisfied is not in this queue
+   */
+  public find(predicate: SearchPredicate<E>): number {
+    let position = 1;
+    let found = false;
+    for (const element of this) {
+      if (predicate(element)) {
+        found = true;
+        break;
+      }
+      position++;
+    }
+
+    return found ? position : -1;
   }
 }

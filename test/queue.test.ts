@@ -14,9 +14,10 @@ describe('queue test', function() {
     const queue = new Queue<number>();
     queue.enqueue(10);
     queue.enqueue(20);
+    queue.enqueue(30);
 
     expect(queue.dequeue()).toEqual(10);
-    expect(queue.dequeue()).toEqual(20);
+    expect(queue.dequeue(2)).toEqual(30);
     expect(() => {
       queue.dequeue();
     }).toThrow(EmptyQueueException);
@@ -66,6 +67,17 @@ describe('queue test', function() {
 
     expect(queue.search(10)).toEqual(1);
     expect(queue.search(50)).toEqual(-1);
+  });
+
+  it('should find', function() {
+    const queue = new Queue<string>();
+    queue.enqueue('apple');
+    queue.enqueue('banana');
+    queue.enqueue('cat');
+    queue.enqueue('dog');
+
+    expect(queue.find(word => word.at(0) === 'c')).toEqual(3);
+    expect(queue.find(word => word.at(0) === 'e')).toEqual(-1);
   });
 
   it('should iterable', function() {

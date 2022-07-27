@@ -1,4 +1,5 @@
 import { EmptyQueueException } from './exceptions';
+import { SearchPredicate } from './type';
 
 export default class Queue<E = any> {
   /**
@@ -8,11 +9,12 @@ export default class Queue<E = any> {
    */
   private elements: E[] = [];
 
-  /**
-   * To create an empty queue or a queue with given elements in a form of iterable.
-   */
   public constructor();
   public constructor(iterable: Iterable<E>);
+  /**
+   * To create an empty queue or a queue with given elements in a form of iterable.
+   * @param iterable an iterable object to quickly initialize this queue
+   */
   public constructor(iterable?: Iterable<E>) {
     if (iterable) {
       for (const element of iterable) {
@@ -40,15 +42,24 @@ export default class Queue<E = any> {
   }
 
   /**
-   * Retrieves and remove the head of this queue.
+   * (when <count> is default) Retrieves and remove the head of this queue.
    * This method differs from poll() only in that it throws an exception if this queue is empty.
-   * @return the head of this queue
-   * @throws EmptyQueueException if this queue is empty
+   * (when <count> is greater than 1) Executes <count> times of dequeue and return the last item.
+   * Item traveled will be removed, including the returned one.
+   * @param count the number of times executing dequeue, the default value is 1
+   * @return the head of this queue or the last dequeue item
+   * @throws EmptyQueueException (when <count> is default) if this queue is empty
+   * @throws EmptyQueueException (when <count> is greater than 1) if this queue is empty when the
+   * last queue is being executed
    */
-  public dequeue(): E {
-    const item = this.elements.shift();
+  public dequeue(count: number = 1): E {
+    let item;
 
-    if (item == undefined) {
+    for (let i = 0; i < count; ++i) {
+      item = this.elements.shift();
+    }
+
+    if (item === undefined) {
       throw new EmptyQueueException();
     }
 
@@ -118,5 +129,24 @@ export default class Queue<E = any> {
 
     const index = this.elements.indexOf(item);
     return index == -1 ? -1 : index + 1;
+  }
+
+  /**
+   * Iterates over elements of this queue, returning the first element predicate returns true for.
+   * @param predicate the function invoked per iteration.
+   * @return the 1-based depth of the item, or -1 if the item satisfied is not in this queue
+   */
+  public find(predicate: SearchPredicate<E>): number {
+    let position = 1;
+    let found = false;
+    for (const element of this) {
+      if (predicate(element)) {
+        found = true;
+        break;
+      }
+      position++;
+    }
+
+    return found ? position : -1;
   }
 }

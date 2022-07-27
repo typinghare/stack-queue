@@ -15,9 +15,10 @@ describe('stack test', function() {
     const stack = new Stack<number>();
     stack.push(10);
     stack.push(20);
+    stack.push(30);
 
-    expect(stack.pop()).toEqual(20);
-    expect(stack.pop()).toEqual(10);
+    expect(stack.pop()).toEqual(30);
+    expect(stack.pop(2)).toEqual(10);
     expect(() => {
       stack.pop();
     }).toThrow(EmptyStackException);
@@ -67,6 +68,17 @@ describe('stack test', function() {
 
     expect(stack.search(10)).toEqual(3);
     expect(stack.search(50)).toEqual(-1);
+  });
+
+  it('should find', function() {
+    const stack = new Stack<string>();
+    stack.push('apple');
+    stack.push('banana');
+    stack.push('cat');
+    stack.push('dog');
+
+    expect(stack.find(word => word.at(0) === 'c')).toEqual(2);
+    expect(stack.find(word => word.at(0) === 'e')).toEqual(-1);
   });
 
   it('should iterable', function() {
