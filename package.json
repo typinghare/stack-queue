@@ -1,6 +1,6 @@
 {
   "name": "@typinghare/stack-queue",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "A lightweight library implementing Stack and Queue for TypeScript.",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
@@ -25,6 +25,7 @@
     "typescript": "^4.7.4"
   },
   "files": [
-    "src/**/*"
+    "src/**/*",
+    "dist/**/*"
   ]
 }
