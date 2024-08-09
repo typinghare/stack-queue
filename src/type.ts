@@ -1,1 +1,1 @@
-export type SearchPredicate<E> = (item: E) => boolean;
+export type SearchPredicate<E> = (item: E) => boolean
